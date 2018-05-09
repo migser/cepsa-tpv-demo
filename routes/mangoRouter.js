@@ -18,4 +18,4 @@ mangoRouter.route('/compra/:id')
     
 });
 
-module.exports = eventRouter;
+module.exports = mangoRouter;
