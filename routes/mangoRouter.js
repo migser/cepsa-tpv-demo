@@ -21,14 +21,14 @@ mangoRouter.route('/compra/:id')
 mangoRouter.route('/compra')
     .post((req, res, next) => {
             console.log('Test OK2');
-            console.log('Parametro: id --> ' + req.param('id','none'));
+            console.log('Parametro: id --> ' + req.query['id']);
             console.log('JSON: '+req.body.P1);
             //db.getCustomer(req, res, next;
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
                 var respuesta = {
                     texto: 'Test OK',
-                    id: req.param('id','none'),
+                    id: req.query['id'],
                     request: req.body
                 };
                 res.json(respuesta);
