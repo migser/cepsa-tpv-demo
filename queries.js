@@ -12,6 +12,7 @@ console.log('Conectado a la BBDD');
 // add query functions
 
 function getCustomer(req, res, next) {
+    console.log('Iniciando getCustomer');
     var customer = parseInt(req.params.id);
     db.one('select * from test where B = $1', customer)
         .then(function (data) {
