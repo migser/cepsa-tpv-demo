@@ -20,7 +20,7 @@ const eventRouter = express.Router();
 eventRouter.route('/compra')
 .post((req, res, next) => {
             console.log('Test OK');
-            res.statusCode = response.statusCode;
+            res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
             var respuesta = { texto: 'Test OK' };
             res.json(respuesta);
