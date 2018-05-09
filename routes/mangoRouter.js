@@ -18,4 +18,17 @@ mangoRouter.route('/compra/:id')
     
 });
 
+mangoRouter.route('/compra')
+    .post((req, res, next) => {
+            console.log('Test OK2');
+            console.log('Parametro: id --> ' + req.param('id'));
+            //db.getCustomer(req, res, next;
+                /*res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                var respuesta = { texto: 'Test OK' };
+                res.json(respuesta);*/
+
+
+            });
+
 module.exports = mangoRouter;
