@@ -22,7 +22,7 @@ mangoRouter.route('/compra')
     .post((req, res, next) => {
             console.log('Test OK2');
             console.log('Parametro: id --> ' + req.param('id'));
-            console.log('JSON: '+req.body);
+            console.log('JSON: '+req.body.P1);
             //db.getCustomer(req, res, next;
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
