@@ -23,10 +23,13 @@ mangoRouter.route('/compra')
             console.log('Test OK2');
             console.log('Parametro: id --> ' + req.param('id'));
             //db.getCustomer(req, res, next;
-                /*res.statusCode = 200;
+                res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
-                var respuesta = { texto: 'Test OK' };
-                res.json(respuesta);*/
+                var respuesta = {
+                    texto: 'Test OK',
+                    id: req.param('id')
+                };
+                res.json(respuesta);
 
 
             });
