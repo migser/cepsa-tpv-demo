@@ -9,7 +9,7 @@ const mangoRouter = express.Router();
 mangoRouter.route('/compra/:id')
 .post((req, res, next) => {
             console.log('Test OK');
-            db.getCustomer;
+            db.getCustomer(req, res, next);
             /*res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
             var respuesta = { texto: 'Test OK' };
