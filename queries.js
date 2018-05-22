@@ -34,6 +34,7 @@ function getSimulation(req, res, next) {
     var productId = req.body.ticket.productId;
     var storeId = req.body.ticket.storeId;
     var amount = req.body.ticket.ticketAmount;
+    console.log('Parametros: '+clientId+' '+productId+' '+storeId+' '+amount);
     db.one('select case R.TXT_Factor_Type__c '+
            ' WHEN \'Fijo\' '+
            ' THEN R.NUM_Factor_value__C WHEN \'%\''+
