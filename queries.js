@@ -38,7 +38,7 @@ function getSimulation(req, res, next) {
     console.log('Parametros: '+clientId+' '+productId+' '+storeId+' '+amount);
     const likes = 'likes(\'' + clientId + '\',\'' + storeId + '\',\''+ productId+'\','+amount+')';
     console.log('funcion: '+likes);
-    db.one('SELECT * FROM foo($1:raw)', likes)
+    db.one('SELECT * FROM $1:raw', likes)
    // db.one('select * from likes($1,$2,$3,$4)',[clientId,storeId,productId,amount])
         .then(function (data) {
             console.log('Aplicando regla ' + data.rule + ' Timestamp: ' + Date.now().toString());
