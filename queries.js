@@ -53,7 +53,7 @@ function getSimulation(req, res, next) {
                     message: 'OK',
                     ticketid: req.body.ticket.ticketId,
                     purchasePoints: data.likes,
-                    purchaseTimeStamp: Date.now(),
+                    purchaseTimeStamp: Date.now().toString(),
                     clientPoints: data.loyalty_point_qty__c
                 });
         })
