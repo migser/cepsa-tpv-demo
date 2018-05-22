@@ -39,7 +39,7 @@ function getSimulation(req, res, next) {
     db.one('select * from likes($1,$2,$3,$4)'
         ,[clientId,storeId,productId,amount])
         .then(function (data) {
-            console.log('Aplicando regla ' + data.name + ' Timestamp: ' + Date.now().toString());
+            console.log('Aplicando regla ' + data.rule + ' Timestamp: ' + Date.now().toString());
             var d = new time.Date();
             d.setTimezone('Europe/Madrid');
             res.status(200)
@@ -49,7 +49,7 @@ function getSimulation(req, res, next) {
                     ticketid: req.body.ticket.ticketId,
                     purchasePoints: data.likes,
                     purchaseTimeStamp: d.toString(),
-                    clientPoints: data.loyalty_point_qty__c
+                    clientPoints: data.total_likes
                 });
         })
         .catch(function (err) {
