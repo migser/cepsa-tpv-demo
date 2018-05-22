@@ -37,7 +37,7 @@ function getSimulation(req, res, next) {
     var amount = req.body.ticket.ticketAmount;
     console.log('Parametros: '+clientId+' '+productId+' '+storeId+' '+amount);
     const likes = 'likes(' + clientId + ',' + storeId + ','+ productId+','+amount+')';
-    db.one('SELECT * FROM foo($1:raw)', p)
+    db.one('SELECT * FROM foo($1:raw)', likes)
    // db.one('select * from likes($1,$2,$3,$4)',[clientId,storeId,productId,amount])
         .then(function (data) {
             console.log('Aplicando regla ' + data.rule + ' Timestamp: ' + Date.now().toString());
