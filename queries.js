@@ -36,16 +36,7 @@ function getSimulation(req, res, next) {
     var storeId = req.body.ticket.storeId;
     var amount = req.body.ticket.ticketAmount;
     console.log('Parametros: '+clientId+' '+productId+' '+storeId+' '+amount);
-    db.one('select case R.TXT_Factor_Type__c '+
-           ' WHEN \'Fijo\' '+
-           ' THEN R.NUM_Factor_value__C WHEN \'%\''+
-           ' THEN R.NUM_Factor_value__C * $4 END LIKES,' +
-           ' R.name, '+
-           ' A.loyalty_point_qty__c '+
-           'from salesforce.account a, salesforce.rules_execution__c R, salesforce.producto__c P '+
-           'where a.external_id__C = $1'+
-           ' and R.lkp_customerid__c = A.sfid and coalesce(R.TXT_store__C, $2) = $2'+
-           ' and P.sfid = coalesce(R.LKP_ProductID__c, P.sfid) and P.Referencia__c = $3'
+    db.one('select * from likes($1,$2,$3,$4)'
         ,[clientId,storeId,productId,amount])
         .then(function (data) {
             console.log('Aplicando regla ' + data.name + ' Timestamp: ' + Date.now().toString());
