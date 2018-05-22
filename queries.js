@@ -32,7 +32,7 @@ function getSimulation(req, res, next) {
     console.log('Iniciando getSimulation');
     var clientId  = req.body.clientid;
     var productId = req.body.ticket.productId;
-    var storeId = req.body[ticket].storeId;
+    var storeId = req.body.ticket.storeId;
     var amount = req.body.ticket.ticketAmount;
     console.log('Parametros: '+clientId+' '+productId+' '+storeId+' '+amount);
     db.one('select case R.TXT_Factor_Type__c '+
