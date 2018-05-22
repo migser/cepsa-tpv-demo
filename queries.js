@@ -44,7 +44,7 @@ function getSimulation(req, res, next) {
            'where a.external_id__C = $1'+
            ' and R.lkp_customerid__c = A.sfid and coalesce(R.TXT_store__C, $2) = $2'+
            ' and P.sfid = coalesce(R.LKP_ProductID__c, P.sfid) and P.Referencia__c = $3'
-        ,clientId,storeId,productId,amount)
+        ,[clientId,storeId,productId,amount])
         .then(function (data) {
             res.status(200)
                 .json({
