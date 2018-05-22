@@ -28,6 +28,38 @@ function getCustomer(req, res, next) {
         });
 }
 
+function getSimulation(req, res, next) {
+    console.log('Iniciando getSimulation');
+    var clientId  = req.body.clientid;
+    var productId = req.body.ticket.productId;
+    var storeId = req.body.ticket.storeId;
+    db.one('select case R.TXT_Factor_Type__c '+
+           ' WHEN \'Fijo\' '+
+           ' THEN R.NUM_Factor_value__C WHEN \'%\''+
+           ' THEN R.NUM_Factor_value__C * 1 END LIKES,' +
+           ' R.name, '+
+           ' A.loyalty_point_qty__c '+
+           'from salesforce.account a, salesforce.rules_execution__c R, salesforce.producto__c P '+
+           'where a.external_id__C = $1'+
+           ' and R.lkp_customerid__c = A.sfid and coalesce(R.TXT_store__C, $2) = $2'+
+           ' and P.sfid = coalesce(R.LKP_ProductID__c, P.sfid) and P.Referencia__c = $3'
+        ,clientId,storeId,productId)
+        .then(function (data) {
+            res.status(200)
+                .json({
+                    status: 'OK',
+                    message: 'OK',
+                    ticketid: req.body.ticket.ticketId,
+                    purchasePoints: data.likes,
+                    purchaseTimeStamp: now(),
+                    clientPoints: data.loyalty_point_qty__c
+                });
+        })
+        .catch(function (err) {
+            return next(err);
+        });
+}
+
 
 module.exports = {
     getCustomer: getCustomer
