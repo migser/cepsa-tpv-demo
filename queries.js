@@ -36,7 +36,7 @@ function getSimulation(req, res, next) {
     var storeId = req.body.ticket.storeId;
     var amount = req.body.ticket.ticketAmount;
     console.log('Parametros: '+clientId+' '+productId+' '+storeId+' '+amount);
-    const likes = 'likes(\'' + clientId + '\',' + storeId + ','+ productId+','+amount+')';
+    const likes = 'likes(\'' + clientId + '\',\'' + storeId + '\',\''+ productId+'\','+amount+')';
     db.one('SELECT * FROM foo($1:raw)', likes)
    // db.one('select * from likes($1,$2,$3,$4)',[clientId,storeId,productId,amount])
         .then(function (data) {
