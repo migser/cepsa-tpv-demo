@@ -40,13 +40,13 @@ Simulación
 **********
     Request:
             {
-                clientid: "123",
+                clientid: "Paccount.003",
                 email: "abc@abc.com",
                 loyaltyEan:"123",
                 ticket: {
-                    storeid: "xxx"
+                    storeid: "ILLA"
                     ticketid: "123",
-                    productid: "123",
+                    productid: "23053036",
                     ticketTimestamp: "01/01/2018 09:00:00",
                     ticketAmount: 23
                 }
