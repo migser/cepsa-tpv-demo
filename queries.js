@@ -63,6 +63,7 @@ function getSimulation(req, res, next) {
 
 
 module.exports = {
-    getCustomer: getCustomer
+    getCustomer: getCustomer,
+    getSimulation: getSimulation
 };
 
