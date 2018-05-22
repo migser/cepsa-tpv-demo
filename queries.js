@@ -1,4 +1,5 @@
 var promise = require('bluebird');
+var time = require('time');
 
 var options = {
     // Initialization Options
@@ -48,13 +49,15 @@ function getSimulation(req, res, next) {
         ,[clientId,storeId,productId,amount])
         .then(function (data) {
             console.log('Aplicando regla ' + data.name + ' Timestamp: ' + Date.now().toString());
+            var d = new time.Date();
+            d.setTimeZone('Europe/Madrid');
             res.status(200)
                 .json({
                     status: 'OK',
                     message: 'OK',
                     ticketid: req.body.ticket.ticketId,
                     purchasePoints: data.likes,
-                    purchaseTimeStamp: new Date(),
+                    purchaseTimeStamp: d.toString(),
                     clientPoints: data.loyalty_point_qty__c
                 });
         })
