@@ -70,7 +70,7 @@ Simulación
 mangoRouter.route('/simulacion')
     .post((req, res, next) => {
         console.log('Emepezando Simulación...');
-        console.log('JSON Request: ' + req.body);
+        console.log('JSON Request: ' + JSON.stringify(req.body, null, 2));
         db.getSimulation(req, res, next);
     });
 
