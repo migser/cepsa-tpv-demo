@@ -31,7 +31,7 @@ function getCustomer(req, res, next) {
 
 function getSimulation(req, res, next) {
     console.log('Iniciando getSimulation');
-    var clientId  = req.body.clientid;
+    var clientId  = req.body.clientId;
     var productId = req.body.ticket.productId;
     var storeId = req.body.ticket.storeId;
     var amount = req.body.ticket.ticketAmount;
