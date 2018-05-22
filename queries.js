@@ -47,6 +47,7 @@ function getSimulation(req, res, next) {
            ' and P.sfid = coalesce(R.LKP_ProductID__c, P.sfid) and P.Referencia__c = $3'
         ,[clientId,storeId,productId,amount])
         .then(function (data) {
+            console.log('Aplicando regla ' + data.name + ' Timestamp: ' + Date.now().toString());
             res.status(200)
                 .json({
                     status: 'OK',
