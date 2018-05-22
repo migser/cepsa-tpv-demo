@@ -50,7 +50,7 @@ function getSimulation(req, res, next) {
         .then(function (data) {
             console.log('Aplicando regla ' + data.name + ' Timestamp: ' + Date.now().toString());
             var d = new time.Date();
-            d.setTimeZone('Europe/Madrid');
+            d.setTimezone('Europe/Madrid');
             res.status(200)
                 .json({
                     status: 'OK',
