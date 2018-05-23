@@ -69,19 +69,12 @@ function newCompra(req, res, next) {
     var ticketTimestamp = req.body.ticket.ticketTimestamp;
     var ticketId = req.body.ticket.ticketId;
     var lineas = req.body.ticket;
-
-  //  const likes = 'new_ticket(\'' + clientId + '\',\'' + storeId + '\',\'' + email + '\',\'' + loyaltyEan +'\','   
-   //                               +ticketAmount + ',' + ticketTimestamp + ',\'' + ticketId +'\','+lineas+ ')';
     const newTicket = 'new_ticket(\'' + clientId + '\',\'' + storeId + '\',\'' + email + '\',\'' + loyaltyEan + '\','
                                   +ticketAmount + ',\'' + ticketTimestamp + '\',\''+ticketId + '\',' + lineas + ')';
     console.log('funcion: ' + newTicket);
-    db.any('select * from new_ticket($1,$2,$3,$4,$5,$6,$7,$8::json)', [clientId, storeId, email, loyaltyEan, ticketAmount, ticketTimestamp, ticketId, lineas])
-    //db.func('new_ticket', [clientId , storeId , email , loyaltyEan , ticketAmount ,ticketTimestamp , ticketId, lineas::json ])
+    db.one('select * from new_ticket($1,$2,$3,$4,$5,$6,$7,$8::json)', [clientId, storeId, email, loyaltyEan, ticketAmount, ticketTimestamp, ticketId, lineas])
         .then(data => {
-            console.log('Guardando ticket: ' + ticketId);
-            for (d in data) {
-                console.log(data[d]);
-            }
+            console.log('Guardando ticket: ' + ticketId);    
             console.log('DAtos: '+data.length);
             var d = new time.Date();
             d.setTimezone('Europe/Madrid');
@@ -90,9 +83,9 @@ function newCompra(req, res, next) {
                     status: 'OK',
                     message: 'Ticket Guardado: ' + ticketId,
                     ticketid: ticketId,
-                    purchasePoints: 0,
+                    purchasePoints: data.total_amount,
                     purchaseTimeStamp: d.toString(),
-                    clientPoints: 0
+                    clientPoints: data.clientpoints
                 });
         })
         .catch(error => {
