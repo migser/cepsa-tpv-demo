@@ -61,7 +61,7 @@ mangoRouter.route('/compra')
     .post((req, res, next) => {
         console.log('Emepezando Compra...');
         console.log('JSON Request: ' + JSON.stringify(req.body, null, 2));
-        db.newCompra(req, res, next;
+        db.newCompra(req, res, next);
     });
 
 module.exports = mangoRouter;
