@@ -65,8 +65,8 @@ function newCompra(req, res, next) {
     var email = req.body.email;
     var storeId = req.body.ticket.storeId;
     var loyaltyEan = req.body.loyaltyEan;
-    var ticketAmount = req.ticket.ticketAmount;
-    var ticketTimestamp = req.ticket.ticketTimestamp;
+    var ticketAmount = req.body.ticket.ticketAmount;
+    var ticketTimestamp = req.body.ticket.ticketTimestamp;
     var ticketId = req.body.ticket.ticketId;
     var lineas = req.body.ticket.ticketLines;
 
