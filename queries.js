@@ -47,7 +47,7 @@ function getSimulation(req, res, next) {
             res.status(200)
                 .json({
                     status: 'OK',
-                    message: 'OK',
+                    message: 'Aplicada regla: ' + data.rule,
                     ticketid: req.body.ticket.ticketId,
                     purchasePoints: data.likes,
                     purchaseTimeStamp: d.toString(),
