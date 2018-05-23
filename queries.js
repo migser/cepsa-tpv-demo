@@ -80,7 +80,7 @@ function newCompra(req, res, next) {
         .then(data => {
             console.log('Guardando ticket: ' + ticketId);
             for (d in data) {
-                console.log(d);
+                console.log(data[d]);
             }
             console.log('DAtos: '+data.length);
             var d = new time.Date();
