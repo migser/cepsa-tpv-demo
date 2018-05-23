@@ -80,9 +80,9 @@ function newCompra(req, res, next) {
         .then(data => {
             console.log('Guardando ticket: ' + ticketId);
             for (d in data) {
-                console.log(d.productId);
+                console.log(d);
             }
-            console.log('DAtos: '+data.size());
+            console.log('DAtos: '+data.length;
             var d = new time.Date();
             d.setTimezone('Europe/Madrid');
             res.status(200)
