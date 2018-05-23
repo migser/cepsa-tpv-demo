@@ -68,7 +68,7 @@ function newCompra(req, res, next) {
     var ticketAmount = req.body.ticket.ticketAmount;
     var ticketTimestamp = req.body.ticket.ticketTimestamp;
     var ticketId = req.body.ticket.ticketId;
-    var lineas = req.body.ticket.ticketLines;
+    var lineas = req.body.ticket;
 
   //  const likes = 'new_ticket(\'' + clientId + '\',\'' + storeId + '\',\'' + email + '\',\'' + loyaltyEan +'\','   
    //                               +ticketAmount + ',' + ticketTimestamp + ',\'' + ticketId +'\','+lineas+ ')';
