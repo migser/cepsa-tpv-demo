@@ -82,7 +82,7 @@ function newCompra(req, res, next) {
             for (d in data) {
                 console.log(d);
             }
-            console.log('DAtos: '+data.length;
+            console.log('DAtos: '+data.length);
             var d = new time.Date();
             d.setTimezone('Europe/Madrid');
             res.status(200)
