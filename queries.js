@@ -78,6 +78,8 @@ function newCompra(req, res, next) {
     db.func('new_ticket', [clientId , storeId , email , loyaltyEan , ticketAmount ,null, ticketId,null ])
         .then(data => {
             console.log('Guardando ticket: ' + ticketId);
+            var d = new time.Date();
+            d.setTimezone('Europe/Madrid');
             res.status(200)
                 .json({
                     status: 'OK',
