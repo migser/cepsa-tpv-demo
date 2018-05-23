@@ -79,7 +79,10 @@ function newCompra(req, res, next) {
     //db.func('new_ticket', [clientId , storeId , email , loyaltyEan , ticketAmount ,ticketTimestamp , ticketId, lineas::json ])
         .then(data => {
             console.log('Guardando ticket: ' + ticketId);
-            console.log('DAtos: '+data.toString());
+            for (d in data) {
+                console.log(d.productId);
+            }
+            console.log('DAtos: '+data.size());
             var d = new time.Date();
             d.setTimezone('Europe/Madrid');
             res.status(200)
