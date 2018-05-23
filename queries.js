@@ -70,7 +70,6 @@ function newCompra(req, res, next) {
     var ticketId = req.body.ticket.ticketId;
     var lineas = req.body.ticket.ticketLines;
 
-    console.log('Parametros: ' + clientId + ' ' + productId + ' ' + storeId );
   //  const likes = 'new_ticket(\'' + clientId + '\',\'' + storeId + '\',\'' + email + '\',\'' + loyaltyEan +'\','   
    //                               +ticketAmount + ',' + ticketTimestamp + ',\'' + ticketId +'\','+lineas+ ')';
     const newTicket = 'new_ticket(\'' + clientId + '\',\'' + storeId + '\',\'' + email + '\',\'' + loyaltyEan + '\','
