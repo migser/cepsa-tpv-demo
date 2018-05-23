@@ -75,7 +75,8 @@ function newCompra(req, res, next) {
     const newTicket = 'new_ticket(\'' + clientId + '\',\'' + storeId + '\',\'' + email + '\',\'' + loyaltyEan + '\','
                                   +ticketAmount + ',\'' + ticketTimestamp + '\',\''+ticketId + '\',' + lineas + ')';
     console.log('funcion: ' + newTicket);
-    db.func('new_ticket', [clientId , storeId , email , loyaltyEan , ticketAmount ,ticketTimestamp , ticketId, lineas ])
+    db.none('select * from new_ticket($1,$2,$3,$4,$5,$6,$7,$8::json)', [clientId, storeId, email, loyaltyEan, ticketAmount, ticketTimestamp, ticketId, lineas])
+    //db.func('new_ticket', [clientId , storeId , email , loyaltyEan , ticketAmount ,ticketTimestamp , ticketId, lineas::json ])
         .then(data => {
             console.log('Guardando ticket: ' + ticketId);
             var d = new time.Date();
