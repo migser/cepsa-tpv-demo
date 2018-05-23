@@ -73,7 +73,7 @@ function newCompra(req, res, next) {
   //  const likes = 'new_ticket(\'' + clientId + '\',\'' + storeId + '\',\'' + email + '\',\'' + loyaltyEan +'\','   
    //                               +ticketAmount + ',' + ticketTimestamp + ',\'' + ticketId +'\','+lineas+ ')';
     const newTicket = 'new_ticket(\'' + clientId + '\',\'' + storeId + '\',\'' + email + '\',\'' + loyaltyEan + '\','
-                                  +ticketAmount + ',\'' + ticketId + ')';
+                                  +ticketAmount + ',\'' + ticketTimestamp + '\',\''+ticketId + '\',' + lineas + ')';
     console.log('funcion: ' + newTicket);
     db.func('new_ticket', [clientId , storeId , email , loyaltyEan , ticketAmount ,ticketTimestamp , ticketId, lineas ])
         .then(data => {
