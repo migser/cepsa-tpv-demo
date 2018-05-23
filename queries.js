@@ -59,9 +59,45 @@ function getSimulation(req, res, next) {
         });
 }
 
+function newCompra(req, res, next) {
+    console.log('Iniciando newCompra');
+    var clientId = req.body.clientId;
+    var email = req.body.email;
+    var storeId = req.body.ticket.storeId;
+    var loyaltyEan = req.body.loyaltyEan;
+    var ticketAmount = req.ticket.ticketAmount;
+    var ticketTimestamp = req.ticket.ticketTimestamp;
+    var ticketId = req.body.ticket.ticketId;
+    var lineas = req.body.ticket.ticketLines;
+
+    console.log('Parametros: ' + clientId + ' ' + productId + ' ' + storeId );
+  //  const likes = 'new_ticket(\'' + clientId + '\',\'' + storeId + '\',\'' + email + '\',\'' + loyaltyEan +'\','   
+   //                               +ticketAmount + ',' + ticketTimestamp + ',\'' + ticketId +'\','+lineas+ ')';
+    const newTicket = 'new_ticket(\'' + clientId + '\',\'' + storeId + '\',\'' + email + '\',\'' + loyaltyEan + '\','
+                                  +ticketAmount + ',\'' + ticketId + ')';
+    console.log('funcion: ' + newTicket);
+    db.func('new_ticket', [clientId , storeId , email , loyaltyEan , ticketAmount ,null, ticketId,null ])
+        .then(data => {
+            console.log('Guardando ticket: ' + ticketId);
+            res.status(200)
+                .json({
+                    status: 'OK',
+                    message: 'Ticket Guardado: ' + ticketId,
+                    ticketid: ticketId,
+                    purchasePoints: 0,
+                    purchaseTimeStamp: d.toString(),
+                    clientPoints: 0
+                });
+        })
+        .catch(error => {
+            console.log('ERROR:', error); // print the error;
+        });
+}
+
 
 module.exports = {
     getCustomer: getCustomer,
-    getSimulation: getSimulation
+    getSimulation: getSimulation,
+    newCompra: newCompra
 };
 

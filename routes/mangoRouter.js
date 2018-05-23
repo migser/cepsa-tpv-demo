@@ -18,23 +18,6 @@ mangoRouter.route('/compra/:id')
     
 });
 
-mangoRouter.route('/compra')
-    .post((req, res, next) => {
-            console.log('Test OK2');
-            console.log('Parametro: id --> ' + req.query['id']);
-            console.log('JSON: '+req.body.P1);
-            //db.getCustomer(req, res, next;
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json');
-                var respuesta = {
-                    texto: 'Test OK',
-                    id: req.query['id'],
-                    request: req.body
-                };
-                res.json(respuesta);
-
-
-            });
 /*
 Simulación
 **********
@@ -72,6 +55,13 @@ mangoRouter.route('/simulacion')
         console.log('Emepezando Simulación...');
         console.log('JSON Request: ' + JSON.stringify(req.body, null, 2));
         db.getSimulation(req, res, next);
+    });
+
+mangoRouter.route('/compra')
+    .post((req, res, next) => {
+        console.log('Emepezando Compra...');
+        console.log('JSON Request: ' + JSON.stringify(req.body, null, 2));
+        db.newCompra(req, res, next;
     });
 
 module.exports = mangoRouter;
