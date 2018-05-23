@@ -75,7 +75,7 @@ function newCompra(req, res, next) {
     const newTicket = 'new_ticket(\'' + clientId + '\',\'' + storeId + '\',\'' + email + '\',\'' + loyaltyEan + '\','
                                   +ticketAmount + ',\'' + ticketId + ')';
     console.log('funcion: ' + newTicket);
-    db.func('new_ticket', [clientId , storeId , email , loyaltyEan , ticketAmount ,ticketTimesTamp , ticketId,null ])
+    db.func('new_ticket', [clientId , storeId , email , loyaltyEan , ticketAmount ,ticketTimestamp , ticketId,null ])
         .then(data => {
             console.log('Guardando ticket: ' + ticketId);
             var d = new time.Date();
