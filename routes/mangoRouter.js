@@ -64,4 +64,10 @@ mangoRouter.route('/compra')
         db.newCompra(req, res, next);
     });
 
+    mangoRouter.route('/redeem')
+        .post((req, res, next) => {
+            console.log('Emepezando Redención...');
+            console.log('JSON Request: ' + JSON.stringify(req.body, null, 2));
+            db.newRedencion(req, res, next);
+        });
 module.exports = mangoRouter;
