@@ -79,6 +79,8 @@ function newCompra(req, res, next) {
     //Comprobamos que se van a redimir menos likes de los que tiene
     if (likesRedeemed > clientPoints) {
         console.log('Error: no se pueden redimir más puntos de los disponibles.');
+        var d = new time.Date();
+        d.setTimezone('Europe/Madrid');
          res.status(400)
              .json({
                  status: 'Error',
@@ -91,6 +93,8 @@ function newCompra(req, res, next) {
     } else //el precio total tiene que ser al menos el 50% del original
         if (likesRedeemed*0.05 > ticketAmount * 0.5) {
             console.log('Error: no se puede descontar más del 50% del importe original.');
+            var d = new time.Date();
+            d.setTimezone('Europe/Madrid');
             res.status(400)
                 .json({
                     status: 'Error',
