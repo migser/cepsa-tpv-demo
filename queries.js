@@ -119,7 +119,7 @@ function newCompra(req, res, next) {
                         ticketid: ticketId,
                         purchasePoints: data.total_amount,
                         purchaseTimeStamp: d.toString(),
-                        clientPoints: data.clientpoints
+                        clientPoints: data.clientpoints,
                     });
             })
             .catch(error => {
@@ -127,34 +127,62 @@ function newCompra(req, res, next) {
             });
 }
 
-function newRedencion(req, res, next) {
-    console.log('Iniciando getSimulation');
-    var clientId = req.body.clientId;
-    var productId = req.body.ticket.productId;
-    var storeId = req.body.ticket.storeId;
-    var amount = req.body.ticket.ticketAmount;
-    console.log('Parametros: ' + clientId + ' ' + productId + ' ' + storeId + ' ' + amount);
-    const likes = 'likes(\'' + clientId + '\',\'' + storeId + '\',\'' + productId + '\',' + amount + ')';
-    console.log('funcion: ' + likes);
-    db.one('SELECT * FROM $1:raw', likes)
-        // db.one('select * from likes($1,$2,$3,$4)',[clientId,storeId,productId,amount])
-        .then(function (data) {
-            console.log('Aplicando regla ' + data.rule + ' Timestamp: ' + Date.now().toString());
+function redeem(req, res, next) {
+    var clientPoints = req.body.clientPoints;
+    var likesRedeemed = req.body.likesRedeemed;
+    var ticketAmount = req.body.ticketAmount;
+    if (likesRedeemed > clientPoints) {
+        console.log('Error: no se pueden redimir más puntos de los disponibles.');
+        var d = new time.Date();
+        d.setTimezone('Europe/Madrid');
+        res.status(400)
+            .json({
+                status: 'Error',
+                message: 'No se pueden redimir más likes de los disponibles. Likes disponibles: ' + clientPoints + ' > Likes a redimir: ' + likesRedeemed,
+                ticketid: ticketId,
+                likesRedeemed: likesRedeemed,
+                purchaseTimeStamp: d.toString(),
+                newClientPoints: clientPoints,
+                originalCLientPoints: clientPoints,
+                newAmount: ticketAmount ,
+                originalAmount: ticketAmount
+            });
+    } else //el precio total tiene que ser al menos el 50% del original
+        if (likesRedeemed * 0.05 > ticketAmount * 0.5) {
+            console.log('Error: no se puede descontar más del 50% del importe original.');
             var d = new time.Date();
             d.setTimezone('Europe/Madrid');
-            res.status(200)
+            res.status(400)
                 .json({
-                    status: 'OK',
-                    message: 'Aplicada regla: ' + data.rule,
-                    ticketid: req.body.ticket.ticketId,
-                    purchasePoints: data.likes,
+                    status: 'Error',
+                    message: 'No se puede descontar más del 50% del importe original. Importe Original: ' + ticketAmount + ' €, descuento a aplicar : ' + likesRedeemed * 0.05 + ' €',
+                    ticketid: ticketId,
+                    likesRedeemed: likesRedeemed,
                     purchaseTimeStamp: d.toString(),
-                    clientPoints: data.total_likes
+                    newClientPoints: clientPoints ,
+                    originalCLientPoints: clientPoints,
+                    newAmount: ticketAmount,
+                    originalAmount: ticketAmount
                 });
-        })
-        .catch(function (err) {
-            return next(err);
-        });
+        }
+    else {
+        console.log('Redención: ' + ticketId);
+        var d = new time.Date();
+        d.setTimezone('Europe/Madrid');
+        res.status(200)
+            .json({
+                status: 'OK',
+                message: 'Redencion correcta: ' + ticketId,
+                ticketid: ticketId,
+                likesRedeemed: likesRedeemed,
+                purchaseTimeStamp: d.toString(),
+                newClientPoints: clientPoints - likesRedeemed,
+                originalCLientPoints: clientPoints,
+                newAmount: ticketAmount - (likesRedeemed*0.05),
+                originalAmount: ticketAmount
+            });
+    }
+    
 }
 
 
@@ -162,6 +190,6 @@ module.exports = {
     getCustomer: getCustomer,
     getSimulation: getSimulation,
     newCompra: newCompra,
-    newRedencion: newRedencion
+    redeem: redeem
 };
 
