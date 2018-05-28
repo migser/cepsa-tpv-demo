@@ -70,28 +70,57 @@ function newCompra(req, res, next) {
     var ticketTimestamp = req.body.ticket.ticketTimestamp;
     var ticketId = req.body.ticket.ticketId;
     var lineas = req.body.ticket;
+    var clientPoints = req.body.clientPoints;
+    var likesRedeemed = req.body.likesRedeemed;
+    var lineas = req.body.ticket;
     const newTicket = 'new_ticket(\'' + clientId + '\',\'' + storeId + '\',\'' + email + '\',\'' + loyaltyEan + '\','
                                   +ticketAmount + ',\'' + ticketTimestamp + '\',\''+ticketId + '\',' + lineas + ')';
     console.log('funcion: ' + newTicket);
-    db.one('select * from new_ticket($1,$2,$3,$4,$5,$6,$7,$8::json)', [clientId, storeId, email, loyaltyEan, ticketAmount, ticketTimestamp, ticketId, lineas])
-        .then(data => {
-            console.log('Guardando ticket: ' + ticketId);    
-            console.log('DAtos: '+data.length);
-            var d = new time.Date();
-            d.setTimezone('Europe/Madrid');
-            res.status(200)
+    //Comprobamos que se van a redimir menos likes de los que tiene
+    if (likesRedeemed > clientPoints) {
+        console.log('Error: no se pueden redimir más puntos de los disponibles.');
+         res.status(400)
+             .json({
+                 status: 'Error',
+                 message: 'No se pueden redimir más likes de los disponibles. Likes disponibles: ' + clientPoints+' > Likes a redimir: '+likesRedeemed,
+                 ticketid: ticketId,
+                 purchasePoints: null,
+                 purchaseTimeStamp: d.toString(),
+                 clientPoints: null
+             });
+    } else //el precio total tiene que ser al menos el 50% del original
+        if (likesRedeemed*0.05 > ticketAmount * 0.5) {
+            console.log('Error: no se puede descontar más del 50% del importe original.');
+            res.status(400)
                 .json({
-                    status: 'OK',
-                    message: 'Ticket Guardado: ' + ticketId,
+                    status: 'Error',
+                    message: 'No se puede descontar más del 50% del importe original. Importe Original: ' + ticketAmount + ' €, descuento a aplicar : ' + likesRedeemed*0.05,
                     ticketid: ticketId,
-                    purchasePoints: data.total_amount,
+                    purchasePoints: null,
                     purchaseTimeStamp: d.toString(),
-                    clientPoints: data.clientpoints
+                    clientPoints: null
                 });
-        })
-        .catch(error => {
-            console.log('ERROR:', error); // print the error;
-        });
+        }
+    else
+        db.one('select * from new_ticket($1,$2,$3,$4,$5,$6,$7,$8::json)', [clientId, storeId, email, loyaltyEan, ticketAmount, ticketTimestamp, ticketId, lineas, likesRedeemed])
+            .then(data => {
+                console.log('Guardando ticket: ' + ticketId);    
+                console.log('DAtos: '+data.length);
+                var d = new time.Date();
+                d.setTimezone('Europe/Madrid');
+                res.status(200)
+                    .json({
+                        status: 'OK',
+                        message: 'Ticket Guardado: ' + ticketId,
+                        ticketid: ticketId,
+                        purchasePoints: data.total_amount,
+                        purchaseTimeStamp: d.toString(),
+                        clientPoints: data.clientpoints
+                    });
+            })
+            .catch(error => {
+                console.log('ERROR:', error); // print the error;
+            });
 }
 
 function newRedencion(req, res, next) {
