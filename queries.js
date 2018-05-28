@@ -148,7 +148,7 @@ function newCompra(req, res, next) {
 
 function redeem(req, res, next) {
     var clientPoints = req.body.clientPoints;
-    var clientPoints = req.body.ticketId;
+    var ticketId = req.body.ticketId;
     var likesRedeemed = req.body.likesRedeemed;
     var ticketAmount = req.body.ticketAmount;
     if (likesRedeemed > clientPoints) {
