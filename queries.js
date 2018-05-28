@@ -56,6 +56,15 @@ function getSimulation(req, res, next) {
                 });
         })
         .catch(function (err) {
+             res.status(500)
+                 .json({
+                     status: 'Error',
+                     message: error,
+                     ticketid: ticketId,
+                     purchasePoints: null,
+                     purchaseTimeStamp: null,
+                     clientPoints: null,
+                 });
             return next(err);
         });
 }
@@ -106,7 +115,7 @@ function newCompra(req, res, next) {
                 });
         }
     else
-        db.one('select * from new_ticket($1,$2,$3,$4,$5,$6,$7,$8::json)', [clientId, storeId, email, loyaltyEan, ticketAmount, ticketTimestamp, ticketId, lineas, likesRedeemed])
+        db.one('select * from new_ticket($1,$2,$3,$4,$5,$6,$7,$8::json,$9)', [clientId, storeId, email, loyaltyEan, ticketAmount, ticketTimestamp, ticketId, lineas, likesRedeemed])
             .then(data => {
                 console.log('Guardando ticket: ' + ticketId);    
                 console.log('DAtos: '+data.length);
@@ -124,6 +133,16 @@ function newCompra(req, res, next) {
             })
             .catch(error => {
                 console.log('ERROR:', error); // print the error;
+                res.status(500)
+                    .json({
+                        status: 'Error',
+                        message: error,
+                        ticketid: ticketId,
+                        purchasePoints: null,
+                        purchaseTimeStamp: null,
+                        clientPoints: null,
+                    });
+                    return next(err);
             });
 }
 
