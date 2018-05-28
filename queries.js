@@ -98,7 +98,7 @@ function newCompra(req, res, next) {
             res.status(400)
                 .json({
                     status: 'Error',
-                    message: 'No se puede descontar más del 50% del importe original. Importe Original: ' + ticketAmount + ' €, descuento a aplicar : ' + likesRedeemed*0.05,
+                    message: 'No se puede descontar más del 50% del importe original. Importe Original: ' + ticketAmount + ' €, descuento a aplicar : ' + likesRedeemed*0.05+' €',
                     ticketid: ticketId,
                     purchasePoints: null,
                     purchaseTimeStamp: d.toString(),
