@@ -87,7 +87,7 @@ function newCompra(req, res, next) {
     console.log('funcion: ' + newTicket);
     //Comprobamos que se van a redimir menos likes de los que tiene
     if (likesRedeemed > clientPoints) {
-        console.log('Error: no se pueden redimir más puntos de los disponibles.');
+        console.log('Error: no se pueden redimir más puntos de los disponibles: '+likesRedeemed+ ' '+ clientPoints);
         var d = new time.Date();
         d.setTimezone('Europe/Madrid');
          res.status(400)
@@ -151,57 +151,100 @@ function redeem(req, res, next) {
     var ticketId = req.body.ticketId;
     var likesRedeemed = req.body.likesRedeemed;
     var ticketAmount = req.body.ticketAmount;
-    if (likesRedeemed > clientPoints) {
-        console.log('Error: no se pueden redimir más puntos de los disponibles.');
-        var d = new time.Date();
-        d.setTimezone('Europe/Madrid');
-        res.status(400)
-            .json({
-                status: 'Error',
-                message: 'No se pueden redimir más likes de los disponibles. Likes disponibles: ' + clientPoints + ' > Likes a redimir: ' + likesRedeemed,
-                ticketid: ticketId,
-                likesRedeemed: likesRedeemed,
-                purchaseTimeStamp: d.toString(),
-                newClientPoints: clientPoints,
-                originalCLientPoints: clientPoints,
-                newAmount: ticketAmount ,
-                originalAmount: ticketAmount
-            });
-    } else //el precio total tiene que ser al menos el 50% del original
-        if (likesRedeemed * 0.05 > ticketAmount * 0.5) {
-            console.log('Error: no se puede descontar más del 50% del importe original.');
-            var d = new time.Date();
-            d.setTimezone('Europe/Madrid');
-            res.status(400)
+    var clientId = req.body.clientId;
+
+    db.one('select * from likes_validos($1)', [clientId])
+        .then(data => {
+            if (data.valido =='OK'){
+                if (likesRedeemed > clientPoints) {
+                    console.log('Error: no se pueden redimir más puntos de los disponibles.');
+                    var d = new time.Date();
+                    d.setTimezone('Europe/Madrid');
+                    res.status(400)
+                        .json({
+                            status: 'Error',
+                            message: 'No se pueden redimir más likes de los disponibles. Likes disponibles: ' + clientPoints + ' > Likes a redimir: ' + likesRedeemed,
+                            ticketid: ticketId,
+                            likesRedeemed: likesRedeemed,
+                            purchaseTimeStamp: d.toString(),
+                            likesExpirationDate: data.expiration,
+                            newClientPoints: clientPoints,
+                            originalCLientPoints: clientPoints,
+                            newAmount: ticketAmount,
+                            originalAmount: ticketAmount
+                        });
+                } else //el precio total tiene que ser al menos el 50% del original
+                    if (likesRedeemed * 0.05 > ticketAmount * 0.5) {
+                        console.log('Error: no se puede descontar más del 50% del importe original.');
+                        var d = new time.Date();
+                        d.setTimezone('Europe/Madrid');
+                        res.status(400)
+                            .json({
+                                status: 'Error',
+                                message: 'No se puede descontar más del 50% del importe original. Importe Original: ' + ticketAmount + ' €, descuento a aplicar : ' + likesRedeemed * 0.05 + ' €',
+                                ticketid: ticketId,
+                                likesRedeemed: likesRedeemed,
+                                purchaseTimeStamp: d.toString(),
+                                likesExpirationDate: data.expiration,
+                                newClientPoints: clientPoints,
+                                originalCLientPoints: clientPoints,
+                                newAmount: ticketAmount,
+                                originalAmount: ticketAmount
+                            });
+                    }
+                    else {
+                        console.log('Redención: ' + ticketId);
+                        var d = new time.Date();
+                        d.setTimezone('Europe/Madrid');
+                        res.status(200)
+                            .json({
+                                status: 'OK',
+                                message: 'Redencion correcta: ' + ticketId,
+                                ticketid: ticketId,
+                                likesRedeemed: likesRedeemed,
+                                purchaseTimeStamp: d.toString(),
+                                likesExpirationDate: data.expiration,
+                                newClientPoints: clientPoints - likesRedeemed,
+                                originalCLientPoints: clientPoints,
+                                newAmount: ticketAmount - (likesRedeemed * 0.05),
+                                originalAmount: ticketAmount
+                            });
+                    }
+            }
+            else {
+                console.log('Error: los likes han caducado.');
+                var d = new time.Date();
+                d.setTimezone('Europe/Madrid');
+                res.status(400)
+                    .json({
+                        status: 'Error',
+                        message: 'Los likes han caducado y no se pueden redimir. Fecha de caducidad: ' + data.expiration,
+                        ticketid: ticketId,
+                        likesRedeemed: likesRedeemed,
+                        purchaseTimeStamp: d.toString(),
+                        likesExpirationDate: data.expiration,
+                        newClientPoints: clientPoints,
+                        originalCLientPoints: clientPoints,
+                        newAmount: ticketAmount,
+                        originalAmount: ticketAmount
+                    });
+            }
+        })
+        .catch(error => {
+            console.log('ERROR:', error); // print the error;
+            res.status(500)
                 .json({
                     status: 'Error',
-                    message: 'No se puede descontar más del 50% del importe original. Importe Original: ' + ticketAmount + ' €, descuento a aplicar : ' + likesRedeemed * 0.05 + ' €',
+                    message: error,
                     ticketid: ticketId,
-                    likesRedeemed: likesRedeemed,
-                    purchaseTimeStamp: d.toString(),
-                    newClientPoints: clientPoints ,
-                    originalCLientPoints: clientPoints,
-                    newAmount: ticketAmount,
-                    originalAmount: ticketAmount
+                    purchasePoints: null,
+                    purchaseTimeStamp: null,
+                    clientPoints: null,
                 });
-        }
-    else {
-        console.log('Redención: ' + ticketId);
-        var d = new time.Date();
-        d.setTimezone('Europe/Madrid');
-        res.status(200)
-            .json({
-                status: 'OK',
-                message: 'Redencion correcta: ' + ticketId,
-                ticketid: ticketId,
-                likesRedeemed: likesRedeemed,
-                purchaseTimeStamp: d.toString(),
-                newClientPoints: clientPoints - likesRedeemed,
-                originalCLientPoints: clientPoints,
-                newAmount: ticketAmount - (likesRedeemed*0.05),
-                originalAmount: ticketAmount
-            });
-    }
+            return next(err);
+        });
+
+   
     
 }
 
