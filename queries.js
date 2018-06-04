@@ -215,6 +215,8 @@ function redeem(req, res, next) {
                 console.log('Error: los likes han caducado.');
                 var d = new time.Date();
                 d.setTimezone('Europe/Madrid');
+                var d2 = new time.Date(data.expiration);
+                d.setTimezone('Europe/Madrid');
                 res.status(400)
                     .json({
                         status: 'Error',
@@ -222,7 +224,7 @@ function redeem(req, res, next) {
                         ticketid: ticketId,
                         likesRedeemed: likesRedeemed,
                         purchaseTimeStamp: d.toString(),
-                        likesExpirationDate: data.expiration,
+                        likesExpirationDate: d2.toString(),
                         newClientPoints: clientPoints,
                         originalCLientPoints: clientPoints,
                         newAmount: ticketAmount,
