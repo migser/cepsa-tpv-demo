@@ -33,7 +33,9 @@ function getCustomer(req, res, next) {
 
 function getSimulation(req, res, next) {
     console.log('Iniciando getSimulation');
-    const clientId = req.body;
+    const {
+        clientId
+    } = req.body;
     const productId = req.body.ticket;
     const storeId = req.body.ticket;
     const amount = req.body.ticket.ticketAmount;
@@ -60,7 +62,7 @@ function getSimulation(req, res, next) {
             res.status(500)
                 .json({
                     status: 'Error',
-                    message: 'error',
+                    message: err,
                     ticketid: req.body.ticket.ticketId,
                     purchasePoints: null,
                     purchaseTimeStamp: null,
