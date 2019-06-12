@@ -1,22 +1,22 @@
 const express = require('express');
-var unirest = require('unirest');
+// const unirest = require('unirest');
 
 
-var db = require('../queries');
+const db = require('../queries');
 
 const mangoRouter = express.Router();
 
 mangoRouter.route('/compra/:id')
-.post((req, res, next) => {
-            console.log('Test OK');
-            db.getCustomer(req, res, next);
-            /*res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            var respuesta = { texto: 'Test OK' };
-            res.json(respuesta);*/
-       
-    
-});
+    .post((req, res, next) => {
+        console.log('Test OK');
+        db.getCustomer(req, res, next);
+        /* res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        var respuesta = { texto: 'Test OK' };
+        res.json(respuesta); */
+
+
+    });
 
 /*
 Simulación
@@ -53,21 +53,21 @@ Simulación
 mangoRouter.route('/simulacion')
     .post((req, res, next) => {
         console.log('Emepezando Simulación...');
-        console.log('JSON Request: ' + JSON.stringify(req.body, null, 2));
+        console.log(`JSON Request: ${  JSON.stringify(req.body, null, 2)}`);
         db.getSimulation(req, res, next);
     });
 
 mangoRouter.route('/compra')
     .post((req, res, next) => {
         console.log('Emepezando Compra...');
-        console.log('JSON Request: ' + JSON.stringify(req.body, null, 2));
+        console.log(`JSON Request: ${  JSON.stringify(req.body, null, 2)}`);
         db.newCompra(req, res, next);
     });
 
-    mangoRouter.route('/redeem')
-        .post((req, res, next) => {
-            console.log('Emepezando Redención...');
-            console.log('JSON Request: ' + JSON.stringify(req.body, null, 2));
-            db.redeem(req, res, next);
-        });
+mangoRouter.route('/redeem')
+    .post((req, res, next) => {
+        console.log('Emepezando Redención...');
+        console.log(`JSON Request: ${  JSON.stringify(req.body, null, 2)}`);
+        db.redeem(req, res, next);
+    });
 module.exports = mangoRouter;
