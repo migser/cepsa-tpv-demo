@@ -61,6 +61,8 @@ mangoRouter.route('/test-xml')
     .post((req, res, next) => {
         console.log('Emepezando Test XML...');
         console.log(`JSON Request: ${  JSON.stringify(req.body, null, 2)}`);
+        res.setHeader('Content-Type', 'application/json');
+        res.json(req.body);
     });
 
 mangoRouter.route('/compra')
