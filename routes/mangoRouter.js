@@ -57,6 +57,12 @@ mangoRouter.route('/simulacion')
         db.getSimulation(req, res, next);
     });
 
+mangoRouter.route('/test-xml')
+    .post((req, res, next) => {
+        console.log('Emepezando Test XML...');
+        console.log(`JSON Request: ${  JSON.stringify(req.body, null, 2)}`);
+    });
+
 mangoRouter.route('/compra')
     .post((req, res, next) => {
         console.log('Emepezando Compra...');
