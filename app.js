@@ -8,7 +8,7 @@ const xmlparser = require('express-xml-bodyparser');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
-const mango = require('./routes/mangoRouter');
+const cepsa = require('./routes/cepsaRouter');
 
 
 const app = express();
@@ -30,7 +30,7 @@ app.use(xmlparser());
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/mango/loyalty', mango);
+app.use('/cepsa/tpv', cepsa);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

@@ -4,9 +4,9 @@ const express = require('express');
 
 const db = require('../queries');
 
-const mangoRouter = express.Router();
+const cepsaRouter = express.Router();
 
-mangoRouter.route('/compra/:id')
+cepsaRouter.route('/compra/:id')
     .post((req, res, next) => {
         console.log('Test OK');
         db.getCustomer(req, res, next);
@@ -50,14 +50,14 @@ Simulación
 
     No se modifica ninguna tabla
 */
-mangoRouter.route('/simulacion')
+cepsaRouter.route('/simulacion')
     .post((req, res, next) => {
         console.log('Emepezando Simulación...');
         console.log(`JSON Request: ${  JSON.stringify(req.body, null, 2)}`);
         db.getSimulation(req, res, next);
     });
 
-mangoRouter.route('/test-xml')
+cepsaRouter.route('/test-xml')
     .post((req, res, next) => {
         console.log('Emepezando Test XML...');
         console.log(`JSON Request: ${  JSON.stringify(req.body, null, 2)}`);
@@ -65,17 +65,17 @@ mangoRouter.route('/test-xml')
         res.json(req.body);
     });
 
-mangoRouter.route('/compra')
+cepsaRouter.route('/compra')
     .post((req, res, next) => {
         console.log('Emepezando Compra...');
         console.log(`JSON Request: ${  JSON.stringify(req.body, null, 2)}`);
         db.newCompra(req, res, next);
     });
 
-mangoRouter.route('/redeem')
+cepsaRouter.route('/redeem')
     .post((req, res, next) => {
         console.log('Emepezando Redención...');
         console.log(`JSON Request: ${  JSON.stringify(req.body, null, 2)}`);
         db.redeem(req, res, next);
     });
-module.exports = mangoRouter;
+module.exports = cepsaRouter;
