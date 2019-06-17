@@ -262,10 +262,88 @@ function redeem(req, res, next) {
 
 }
 
+function getPromo(req, res, next) {
+    /*
+    Estructura de ejemplo:
+
+        <ticket>
+            <importe> 24.56 </importe>
+            <combustible> Diesel Plus </combustible>
+            <ticketid>12345</ticketid>
+        </ticket>
+
+    Versión JSON:
+        {
+            "ticket": {
+                "importe": [
+                    "24.56"
+                ],
+                "combustible": [
+                    "Diesel Plus"
+                ],
+                "ticketid": [
+                    "12345"
+                ]
+            }
+        }
+    */
+    const {
+        importe
+    } = req.body.ticket;
+    const {
+        combustible
+    } = req.body.ticket;
+    const {
+        ticketid
+    } = req.body.ticket;
+
+    const query = 'UPDATE public.tickets AS t2' ||
+        'SET ticketid = $1, reglaid= (' ||
+        'SELECT r.Regla_ID__c FROM salesforce.regla__c AS R, public.tickets AS t' ||
+        'WHERE t.promocion = r.promocion__r__promo_id__c AND' ||
+        't.ticketid IS NULL AND(coalesce(r.combustible__c, $2) = $2) AND' ||
+        ' (' ||
+        '(r.operador__c = \'Mayor\' AND $3 > r.importe__c) OR' ||
+        '(r.operador__c = \'Menor\' AND $3 < r.importe__c) OR' ||
+        '(r.importe__c IS null)' ||
+        ') AND' ||
+        't.promoid = t2.promoid' ||
+        'ORDER BY r.prioridad__c, t.promoid LIMIT 1),' ||
+        'delivered_Date = now()' ||
+        'WHERE t2.promoid = (' ||
+        'SELECT t.promoid' ||
+        'FROM salesforce.regla__c AS R, public.tickets AS t ' ||
+        'WHERE t.promocion = r.promocion__r__promo_id__c AND' ||
+        't.ticketid IS NULL AND(coalesce(r.combustible__c, $2) = $2) AND' ||
+        ' (' ||
+        '(r.operador__c = \'Mayor\' AND $3 > r.importe__c) OR' ||
+        '(r.operador__c = \'Menor\' AND $3 < r.importe__c) OR' ||
+        '(r.importe__c IS null)' ||
+        ') AND' ||
+        'ORDER BY r.prioridad__c, t.promoid LIMIT 1)' ||
+        'RETURNING t2.promoid, t2.ticketid ';
+
+    db.one(query, [ticketid, combustible, importe])
+        .then((data) => {
+            res.status(200)
+                .json({
+                    status: 'success',
+                    data,
+                    message: 'Promoción aplicada'
+                });
+        })
+        .catch((err) => {
+            return next(err);
+        });
+
+
+
+}
 
 module.exports = {
     getCustomer,
     getSimulation,
     newCompra,
-    redeem
+    redeem,
+    getPromo
 };

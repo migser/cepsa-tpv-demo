@@ -78,4 +78,11 @@ cepsaRouter.route('/redeem')
         console.log(`JSON Request: ${  JSON.stringify(req.body, null, 2)}`);
         db.redeem(req, res, next);
     });
+
+cepsaRouter.route('/promo')
+    .post((req, res, next) => {
+        console.log('Emepezando get Promo...');
+        console.log(`JSON Request: ${  JSON.stringify(req.body, null, 2)}`);
+        db.getPromo(req, res, next);
+    });
 module.exports = cepsaRouter;
