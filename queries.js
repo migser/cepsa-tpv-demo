@@ -297,7 +297,7 @@ function getPromo(req, res, next) {
         ticketid
     } = req.body.ticket;
 
-    db.one('select * from actualiza(x,y,33)', [ticketid, combustible, importe])
+    db.one('select * from actualiza(\'x\',\'y\',33)', [ticketid, combustible, importe])
         .then((data) => {
             res.status(200)
                 .json({
