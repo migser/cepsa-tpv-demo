@@ -321,15 +321,15 @@ function getPromo(req, res, next) {
         '(r.importe__c IS null)' ||
         ') AND' ||
         'ORDER BY r.prioridad__c, t.promoid LIMIT 1)' ||
-        'RETURNING t2.promoid, t2.ticketid';
+        'RETURNING t2.promoid, AS PROMOID t2.ticketid AS TICKETID';
 
-    db.one('select $1, $2, $3', [ticketid, combustible, importe])
+    db.one(query, [ticketid, combustible, importe])
         .then((data) => {
             res.status(200)
                 .json({
                     status: 'success',
                     data,
-                    message: 'Promoción aplicada'
+                    message: 'Ticket Procesado'
                 });
         })
         .catch((err) => {
