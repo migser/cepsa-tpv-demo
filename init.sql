@@ -65,3 +65,39 @@ RETURNING t2.promoid, t2.ticketid
 
 
 'UPDATE public.tickets AS t2 SET ticketid=$1, reglaid=(SELECT r.Regla_ID__c FROM salesforce.regla__c AS R,public.tickets AS t WHERE t.promocion = r.promocion__r__promo_id__c AND t.ticketid IS NULL AND (coalesce(r.combustible__c,cast($2 as varchar)=cast($2 as varchar) ) AND ((r.operador__c =\'Mayor\' AND $3 > r.importe__c ) OR (r.operador__c =\'Menor\' AND $3 < r.importe__c ) OR (r.importe__c IS null)) AND t.promoid = t2.promoid ORDER BY r.prioridad__c, t.promoid LIMIT 1) , delivered_Date = now() WHERE t2.promoid = ( SELECT t.promoid FROM public.tickets AS T, salesforce.regla__c AS R WHERE t.promocion = r.promocion__r__promo_id__c AND t.ticketid IS NULL AND (coalesce(r.combustible__c,cast($2 as varchar))=cast($2 as varchar) ) AND ((r.operador__c =\'Mayor\' AND $3 > r.importe__c ) OR (r.operador__c =\'Menor\' AND $3 < r.importe__c ) OR (r.importe__c IS null)) ORDER BY r.prioridad__c, t.promoid LIMIT 1) RETURNING t2.promoid AS PROMOID, t2.ticketid AS TICKETID'
+
+
+Con funcion SQL:
+
+
+CREATE TYPE salida AS (promoid varchar(200), ticketid varchar(200), reglaid varchar(200));
+
+CREATE OR REPLACE FUNCTION actualiza(varchar, varchar, double precision) RETURNS salida AS $$
+UPDATE public.tickets AS t2
+ SET ticketid=$1, reglaid=(
+SELECT r.Regla_ID__c
+FROM salesforce.regla__c AS R,public.tickets AS t
+WHERE t.promocion = r.promocion__r__promo_id__c AND 
+t.ticketid IS NULL AND 
+(coalesce(r.combustible__c,$2)=$2 ) AND
+((r.operador__c ='Mayor' AND $3 > r.importe__c ) OR 
+(r.operador__c ='Menor' AND $3 < r.importe__c ) OR
+(r.importe__c IS null)) AND
+t.promoid = t2.promoid
+ORDER BY r.prioridad__c, t.promoid 
+LIMIT 1) , delivered_Date = now()
+WHERE t2.promoid = (
+SELECT t.promoid 
+FROM public.tickets AS T, salesforce.regla__c AS R
+WHERE t.promocion = r.promocion__r__promo_id__c AND 
+t.ticketid IS NULL AND 
+(coalesce(r.combustible__c,$2)=$2 ) AND
+((r.operador__c ='Mayor' AND $3 > r.importe__c ) OR 
+(r.operador__c ='Menor' AND $3 < r.importe__c ) OR
+(r.importe__c IS null))
+ORDER BY r.prioridad__c, t.promoid 
+LIMIT 1) 
+RETURNING t2.promoid, t2.ticketid, t2.reglaid;
+$$ LANGUAGE SQL;
+
+select * from actualiza('ticket1','Diesel Plus',12);
