@@ -299,7 +299,7 @@ function getPromo(req, res, next) {
 
     // db.one('select * from actualiza2(\'x\',\'y\',33)', [ticketid, combustible, importe])
     console.log(`select * from public.actualiza(${ticketid},${combustible},${importe})`);
-    db.one('select * from public.actualiza($1)', [importe])
+    db.one('select * from public.actualiza($1)', ['23'])
         .then((data) => {
             res.status(200)
                 .json({
