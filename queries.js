@@ -297,16 +297,23 @@ function getPromo(req, res, next) {
         ticketid
     } = req.body.ticket;
 
-    // db.one('select * from actualiza2(\'x\',\'y\',33)', [ticketid, combustible, importe])
-    console.log(`select * from public.actualiza(${ticketid},${combustible[0]},${toString(importe)})`);
-    db.one('select * from public.actualiza($1)', [importe[0]])
+    db.one('select * from public.actualiza($1,$2,$3)', [ticketid[0], combustible[0], importe[0]])
         .then((data) => {
-            res.status(200)
-                .json({
-                    status: 'success',
-                    data,
-                    message: 'Ticket Procesado'
-                });
+            if (data.promoid) {
+                res.status(200)
+                    .json({
+                        status: 'success',
+                        data,
+                        message: 'Promoción Enviada'
+                    });
+            } else {
+                res.status(404)
+                    .json({
+                        status: 'not found!',
+                        message: 'No hay promociones disponibles'
+                    });
+            }
+
         })
         .catch((err) => {
             return next(err);
